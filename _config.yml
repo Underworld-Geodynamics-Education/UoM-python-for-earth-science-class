@@ -3,8 +3,8 @@ title: LM Teaching
 email: louis.moresi@unimelb.edu.au
 description: Teaching materials
 
-baseurl: "/tutorial/" # the subpath of your site, e.g. /blog/
-url: "http://github.moresi.info" # the base hostname & protocol for your site
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://github.moresi.info/tutorial" # the base hostname & protocol for your site
 twitter_username: louismoresi
 github_username:  lmoresi
 permalink: /:year/:month/:day/:title/
