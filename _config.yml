@@ -1,20 +1,47 @@
-# Site settings
-title: LM Teaching
-email: louis.moresi@unimelb.edu.au
-description: Teaching materials
+# visit https://github.com/mojombo/jekyll/wiki/Configuration for more settings
 
-baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://github.moresi.info/tutorial" # the base hostname & protocol for your site
-twitter_username: louismoresi
-github_username:  lmoresi
-permalink: /:year/:month/:day/:title/
-
-# Build settings
-markdown: kramdown
-
-
-# highlight
-# 本地用rouge, github上用pygments
+paginate: 10 # pagination based on number of posts
+paginate_path: "page:num"
+exclude: ["README.md"] # files to exclude
 highlighter: pygments
-# highlighter: rouge
-# highlighter: false
+markdown: redcarpet
+disqus: louismoresi
+#google_analytics: dbyll
+
+redcarpet:
+  extensions: [ "fenced_code_blocks",
+                "hard_wrap",
+                "autolink",
+                "tables",
+                "strikethrough",
+                "with_toc_data",
+                "highlight",
+                "prettify",
+                "no_intra_emphasis"]
+
+excerpt_separator: "\n\n"
+
+defaults:
+  -
+    scope:
+      path: "" # empty string for all files
+    values:
+      title: dbyll
+
+description: Teaching Related Software and Resources
+author:
+  name: Louis Moresi
+  img_url: "blank"
+  email: louis.moresi@unimelb.edu.au
+  github: lmoresi
+  twitter: louismoresi
+  pinterest:
+  linkedin: louis-moresi
+  bio:  Professor of Geophysics, University of Melbourne
+  email_md5:
+
+rss_path:        feed.xml
+categories_path: categories.html
+tags_path:       tags.html
+
+BASE_PATH:
