@@ -1,4 +1,4 @@
-#! /usr/bin/env python 
+#! /usr/bin/env python
 
 # This is the script that has been installed as the git-commit hook
 
@@ -50,6 +50,8 @@ def remove_outputs(nb):
 
 
     return nb2
+
+# Note, this should trawl through subdirectories
 
 fails = 0
 for file in glob.glob("*.ipynb"):
