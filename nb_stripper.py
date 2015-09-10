@@ -53,6 +53,7 @@ def remove_outputs(nb):
 
 # Note, this should trawl through subdirectories
 # Also - where does this actually get executed
+# And by which commands
 
 fails = 0
 for file in glob.glob("*.ipynb"):
