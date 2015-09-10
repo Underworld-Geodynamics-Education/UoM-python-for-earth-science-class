@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python 
 
 # This is the script that has been installed as the git-commit hook
 
@@ -8,7 +8,23 @@ import os
 import glob
 import shutil
 
-from   nbformat import read, write, NO_CONVERT
+
+try:
+    # Jupyter >= 4
+    from nbformat import read, write, NO_CONVERT
+except ImportError:
+    # IPython 3
+    try:
+        from IPython.nbformat import read, write, NO_CONVERT
+    except ImportError:
+        # IPython < 3
+        from IPython.nbformat import current
+
+        def read(f, as_version):
+            return current.read(f, 'json')
+
+        def write(nb, f):
+            return current.write(nb, f, 'json')
 
 def remove_outputs(nb):
     """remove the outputs from a notebook"""
