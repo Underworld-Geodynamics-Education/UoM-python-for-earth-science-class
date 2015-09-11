@@ -44,10 +44,16 @@ def remove_outputs(nb):
     elif (nb2["nbformat"] == 4 ):
             for cell in nb2["cells"]:
                 if cell["cell_type"] == 'code':
-                    cell["outputs"] = []
+                    cell["outputs"] = [
+                    {
+                     "name": "stdout",
+                     "output_type": "stream",
+                     "text": [
+                      "-- Output removed by git commit --\n"
+                     ]
+                    }
+                   ]
                     cell["execution_count"] = None
-
-
 
     return nb2
 
