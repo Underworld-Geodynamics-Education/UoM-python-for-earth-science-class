@@ -7,6 +7,7 @@ import io
 import os
 import glob
 import shutil
+import json
 
 
 try:
@@ -44,15 +45,7 @@ def remove_outputs(nb):
     elif (nb2["nbformat"] == 4 ):
             for cell in nb2["cells"]:
                 if cell["cell_type"] == 'code':
-                    cell["outputs"] = [
-                    {
-                     "name": "stdout",
-                     "output_type": "stream",
-                     "text": [
-                      "-- Output removed by git commit --\n"
-                     ]
-                    }
-                   ]
+                    cell["outputs"] = [ ]
                     cell["execution_count"] = None
 
     return nb2
@@ -62,7 +55,7 @@ def remove_outputs(nb):
 # And by which commands
 
 fails = 0
-for file in glob.glob("*.ipynb"):
+for file in glob.glob("1*.ipynb"):
 
     try:
         with io.open(file, 'r', encoding='utf8') as f:
@@ -70,9 +63,14 @@ for file in glob.glob("*.ipynb"):
 
         nb2 = remove_outputs(nb)
         shutil.copy(file, "{}.backup".format(file))
-        with io.open("{}".format(file), 'w', encoding='utf8') as f:
-             write(nb2, f)
-        print 'stripped NB v {} file "{}"'.format(nb.nbformat, file)
+        try:
+            with io.open("{}.test".format(file), 'w', encoding='utf8') as f:
+                write(nb2, f)
+            print 'stripped NB v {} file "{}"'.format(nb.nbformat, file)
+        except:
+            print "Unable to write file"
+            shutil.copy("{}.backup".format(file), file)
+            print json.dumps( nb2, indent=2 )
 
     except:
         print "Warning: Notebook {} was not stripped of output data, please check before committing".format(file)
