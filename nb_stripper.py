@@ -55,7 +55,7 @@ def remove_outputs(nb):
 # And by which commands
 
 fails = 0
-for file in glob.glob("1*.ipynb"):
+for file in glob.glob("Mapping/*.ipynb"):
 
     try:
         with io.open(file, 'r', encoding='utf8') as f:
@@ -64,7 +64,7 @@ for file in glob.glob("1*.ipynb"):
         nb2 = remove_outputs(nb)
         shutil.copy(file, "{}.backup".format(file))
         try:
-            with io.open("{}.test".format(file), 'w', encoding='utf8') as f:
+            with io.open("{}".format(file), 'w', encoding='utf8') as f:
                 write(nb2, f)
             print 'stripped NB v {} file "{}"'.format(nb.nbformat, file)
         except:
