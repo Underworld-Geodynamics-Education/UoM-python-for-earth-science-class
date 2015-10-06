@@ -1,3 +1,9 @@
 
 *.backup
 .ipynb_checkpoints
+
+*.tiff
+
+Mapping/GlobalAgeAndStrainRate.tiff
+
+Mapping/GlobalAgeMapEq.tiff
