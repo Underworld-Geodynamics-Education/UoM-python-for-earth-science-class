@@ -8,7 +8,7 @@ MAINTAINER Louis Moresi (louis.moresi@unimelb.edu.au)
 
 # Current version of git, please !
 
-RUN apt-get -y git-all
+RUN apt-get -y update && apt-get -y install git-all
 
 # Add the cartopy installation via anaconda
 # Due to issues with shapely 1.5.13 in cartopy 0.13, we
@@ -23,14 +23,14 @@ RUN /opt/conda/bin/conda install -y shapely=1.5.11 && \
 
 # Create a non-privileged user to run the notebooks
 
-RUN useradd --create-home --home-dir /home/serpent --shell /bin/bash --user-group serpent
+RUN useradd --create-home --home-dir /home/serpentine --shell /bin/bash --user-group serpentine
 
 # skip if you need to change things in the live container
 
-USER serpent
-ENV HOME=/home/serpent
+USER serpentine
+ENV HOME=/home/serpentine
 ENV SHELL=/bin/bash
-ENV USER=serpent
+ENV USER=serpentine
 WORKDIR $HOME
 
 # Grab the latest notebooks - if we use git and don't just copy these in,
@@ -47,7 +47,7 @@ RUN git clone https://github.com/lmoresi/UoM-python-for-earth-science-class.git
 
 # Launch the notebook server from the Notebook directory
 
-WORKDIR teaching-python/Notebooks
+WORKDIR UoM-python-for-earth-science-class/Notebooks
 ENTRYPOINT ["/usr/bin/tini", "--"]
 EXPOSE 8888
 CMD jupyter notebook --ip=0.0.0.0 --no-browser
