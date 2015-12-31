@@ -15,9 +15,10 @@ RUN apt-get -y update && apt-get -y install git-all
 # have to use shapely 1.5.11
 # gdal is optional but I need it for image mapping
 
-RUN /opt/conda/bin/conda install -y shapely=1.5.11 && \
-    /opt/conda/bin/conda install -y gdal && \
+RUN /opt/conda/bin/conda install -y gdal && \
     /opt/conda/bin/conda install -y -c scitools cartopy
+
+RUN /opt/conda/bin/conda install -y shapely=1.5.11 
 
 ## This is a natural point to break the image in two for debugging etc
 
