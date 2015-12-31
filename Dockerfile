@@ -38,7 +38,7 @@ WORKDIR $HOME
 # (and if the user has write access to the repo, then it is also possible to
 #  update the repo from the container )
 
-RUN git clone https://github.com/lmoresi/UoM-python-for-earth-science-class.git
+RUN git clone https://github.com/lmoresi/UoM-python-for-earth-science-class.git UoM_course
 
 # Ensure the git commit hooks are installed in case people do try to update
 # the repo from here !
@@ -47,7 +47,7 @@ RUN git clone https://github.com/lmoresi/UoM-python-for-earth-science-class.git
 
 # Launch the notebook server from the Notebook directory
 
-WORKDIR UoM-python-for-earth-science-class/Notebooks
+WORKDIR UoM_course/Notebooks
 ENTRYPOINT ["/usr/bin/tini", "--"]
 EXPOSE 8888
 CMD jupyter notebook --ip=0.0.0.0 --no-browser
