@@ -3,8 +3,11 @@
 .ipynb_checkpoints
 
 
-Mapping/ItaliaEq.tiff
+# Output files people might leave around
+Mapping/*.tiff
+Mapping/*.png
 
-Mapping/GlobalAgeAndStrainRate.tiff
+# This whole directory
+Mapping/output
 
-Mapping/GlobalAgeMapEq.tiff
+
