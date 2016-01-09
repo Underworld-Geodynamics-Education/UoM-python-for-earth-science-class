@@ -1,124 +1,47 @@
-FROM debian:latest
-
-MAINTAINER Louis Moresi
-
-## the update is fine but very slow ... keep it separated so it doesn't
-## get run every time !
-
-RUN apt-get update -y
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        bash-completion \
-        build-essential \
-        git \
-        python \
-        python-dev \
-        python-pip \
-        ssh \
-        curl \
-        libgl1-mesa-dri \
-        libgl1-mesa-glx \
-        rsync \
-        vim \
-        less \
-        xauth \
-        swig
-
-## These are for the full python - scipy stack
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    libopenblas-dev \
-    liblapack-dev \
-    libscalapack-mpi-dev \
-    libhdf5-serial-dev \
-    libnetcdf-dev \
-    gfortran \
-    cython \
-    libfreetype6-dev \
-    python-numpy \
-    python-scipy \
-    python-matplotlib \
-    python-pandas \
-    python-sympy \
-    python-nose \
-    pkg-config
-
-# Better to build the latest versions than use the old apt-gotten ones
-# I'm putting this here as it takes time and ought to be cached before the
-# more ephemeral parts of this image.
-
-RUN pip install matplotlib numpy scipy --upgrade
-
-#
-# These ones are needed for cartopy / imaging / geometry stuff
-#
-
-# (proj4 is buggered up everywhere in apt-get ... so build a known-to-work version from source)
-#
-RUN cd /usr/local && \
-    curl http://download.osgeo.org/proj/proj-4.8.0.tar.gz > proj-4.8.0.tar.gz && \
-    tar -xzf proj-4.8.0.tar.gz && \
-    cd proj-4.8.0 && \
-    ./configure && \
-    make all && \
-    make install
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        python-gdal \
-        python-pil  \
-        python-h5py \
-        libxml2-dev \
-        python-lxml \
-        libgeos-dev
-
-## The recent netcdf4 / pythonlibrary stuff doesn't work properly with the default search paths etc
-## here is a fix which builds the repo version. Hoping that pip install or apt-get install will work again soon
-
-RUN USE_SETUPCFG=0 HDF5_INCDIR=/usr/include/hdf5/serial HDF5_LIBDIR=/usr/lib/x86_64-linux-gnu/hdf5/serial pip install --user git+https://github.com/Unidata/netcdf4-python
-
-RUN pip install \
-            runipy \
-            ipython \
-            shapely==1.5.12 \
-            cartopy \
-            obspy \
-            jupyter
-
-## ==============================================================
-
-# Add Tini
-ENV TINI_VERSION v0.8.4
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
-# ENTRYPOINT ["/tini", "--"]
-
+FROM lmoresi/unimelb-debian-base:v1.01
 
 ## ============================================================
-##
-##
+## base file has all the labour intensive stuff in it. 
+## ============================================================
+
 
 # Create a non-privileged user to run the notebooks
 
 RUN useradd --create-home --home-dir /home/serpentine --shell /bin/bash --user-group serpentine
+RUN mkdir /uom_course && chown serpentine:serpentine /uom_course
 
 # skip if you need to change things in the live container
 
-# USER serpentine
-ENV HOME=/home/serpentine
+USER serpentine
+ENV HOME=/uom_course
 ENV SHELL=/bin/bash
-# ENV USER=serpentine
-# WORKDIR $HOME
+ENV USER=serpentine
+WORKDIR $HOME
 
+# Change the echo statement to break the cache if the git clone needs refreshing.
+RUN echo "!!!" && git clone https://github.com/lmoresi/UoM-python-for-earth-science-class.git /uom_course/ # Watch the cache !
 
-RUN git clone https://github.com/lmoresi/UoM-python-for-earth-science-class.git UoM_course
+RUN ls /uom_course/Notebooks
 
+# Make a scratch directory available to connect to the host machine.
+# Make the Notebook Resources directory available for extracting outputs etc
+# Should not be needed as I put a README there in the repo
+
+# RUN mkdir -p /uom_course/Notebooks/external
+
+VOLUME /uom_course/Notebooks/external
+VOLUME /uom_course/Notebooks/Mapping/Resources
+
+# TODO ...
 # Ensure the git commit hooks are installed in case people do try to update
 # the repo from here !
 
-# TODO ...
-
 # Launch the notebook server from the Notebook directory
+# The file_to_run option actually does nothing with the no-browser option ...
+# but perhaps there is something else that would do this.
 
-WORKDIR UoM_course/Notebooks
+WORKDIR /uom_course/Notebooks
 EXPOSE 8888
-CMD jupyter notebook --ip=0.0.0.0 --no-browser
+ENTRYPOINT ["/usr/local/bin/tini", "--"]
+CMD jupyter notebook --ip=0.0.0.0 --no-browser \
+    --NotebookApp.file_to_run=/uom_course/Notebooks/StartHere.ipynb
