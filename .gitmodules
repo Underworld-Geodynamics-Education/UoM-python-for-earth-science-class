@@ -1,0 +1,3 @@
+[submodule "docker-web-notebook-module"]
+	path = docker-web-notebook-module
+	url = https://github.com/lmoresi/docker-web-notebook-module.git
