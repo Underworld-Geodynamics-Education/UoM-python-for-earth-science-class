@@ -12,15 +12,11 @@ ENV VERSION=1.03
 
 ADD NotebookServer /uom_course/NotebookServer
 ADD CourseContent /uom_course/CourseContent
+RUN install_server.sh
 
-RUN cd /uom_course/NotebookServer && \
-    bundle install
+## Jekyll Sitebuilder - install gems then build
 
-RUN cd /uom_course/NotebookServer && \
-    ln -s ../CourseContent Content && \
-    cp Content/_config.yml _config.yml
-
-RUN   cd /uom_course/NotebookServer &&  _scripts/docker-site-builder
+RUN cd /uom_course/NotebookServer && bundle install &&  _scripts/docker-site-builder
 
 # Make a scratch directory available to connect to the host machine.
 # Make the Notebook Resources directory available for extracting outputs etc
