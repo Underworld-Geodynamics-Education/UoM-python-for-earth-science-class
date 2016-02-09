@@ -1,0 +1,3 @@
+[submodule "NotebookServer"]
+	path = NotebookServer
+	url = https://github.com/lmoresi/docker-web-notebook-server.git

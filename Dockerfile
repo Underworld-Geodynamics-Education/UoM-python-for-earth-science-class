@@ -1,7 +1,9 @@
-FROM lmoresi/unimelb-debian-base:v1.01
+FROM lmoresi/unimelb-debian-base:v1.03
+
+ENV VERSION=1.03
 
 ## ============================================================
-## base file has all the labour intensive stuff in it. 
+## base file has all the labour intensive stuff in it.
 ## ============================================================
 
 
@@ -19,9 +21,15 @@ ENV USER=serpentine
 WORKDIR $HOME
 
 # Change the echo statement to break the cache if the git clone needs refreshing.
-RUN echo "!!!" && git clone https://github.com/lmoresi/UoM-python-for-earth-science-class.git /uom_course/ # Watch the cache !
+RUN git clone --recursive https://github.com/lmoresi/UoM-python-for-earth-science-class.git /uom_course/ # Watch the cache !
 
 RUN ls /uom_course/Notebooks
+
+RUN cd NotebookServer && \
+    ln -s ../NotebookServerContent Content && \
+    cp Content/_config.yml _config.yml && \
+    _scripts/docker-site-builder
+
 
 # Make a scratch directory available to connect to the host machine.
 # Make the Notebook Resources directory available for extracting outputs etc
@@ -43,5 +51,4 @@ VOLUME /uom_course/Notebooks/Mapping/Resources
 WORKDIR /uom_course/Notebooks
 EXPOSE 8888
 ENTRYPOINT ["/usr/local/bin/tini", "--"]
-CMD jupyter notebook --ip=0.0.0.0 --no-browser \
-    --NotebookApp.file_to_run=/uom_course/Notebooks/StartHere.ipynb
+CMD jupyter notebook --ip=0.0.0.0 --no-browser --NotebookApp.='/tree/StartHere.ipynb'
