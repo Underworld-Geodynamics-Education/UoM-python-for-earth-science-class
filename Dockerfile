@@ -12,7 +12,8 @@ ENV VERSION=1.03
 
 ADD NotebookServer /uom_course/NotebookServer
 ADD CourseContent /uom_course/CourseContent
-RUN install_server.sh
+ADD install-server.sh /uom_course/install-server.sh
+RUN /uom_course/install-server.sh
 
 ## Jekyll Sitebuilder - install gems then build
 

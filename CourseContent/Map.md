@@ -16,7 +16,7 @@ _Not everything interesting is found in the menu bar !_
 
 ## Sections
 
-   * [Mapping](/notebooks/Content/Notebooks/user_guide)
+   * [Mapping](/notebooks/Content/Notebooks/Mapping)
 
 
 ## Other
