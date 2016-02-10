@@ -2,14 +2,8 @@
 *.backup
 .ipynb_checkpoints
 
+# Ignore specific changes in sub-repo
+# Maybe this will help it to know that the sub-repo is still clean
 
-# Output files people might leave around
-Mapping/*.tiff
-Mapping/*.png
-
-# This whole directory
-Mapping/output
-
-
-
-Notebooks/Mapping/GlobalAgeAndStrainRate.tiff
+NotebookServer/Content
+NotebookServer/_config.yml
