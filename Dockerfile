@@ -20,30 +20,20 @@ RUN /uom_course/install-server.sh
 RUN cd /uom_course/NotebookServer && bundle install &&  _scripts/docker-site-builder
 
 # Make a scratch directory available to connect to the host machine.
-# Make the Notebook Resources directory available for extracting outputs etc
-# Should not be needed as I put a README there in the repo
+VOLUME /uom_course/NotebookServer/_site/Content/Notebooks/external
 
 # Create a non-privileged user to run the notebooks
 
-# RUN useradd --create-home --home-dir /home/serpentine --shell /bin/bash --user-group serpentine
-# RUN chown serpentine:serpentine /uom_course
+RUN useradd --create-home --home-dir /home/serpentine --shell /bin/bash --user-group serpentine
+RUN chown -R serpentine:serpentine /uom_course
 
 # skip if you need to change things in the live container
 
-# USER serpentine
-# ENV HOME=/uom_course
-# ENV SHELL=/bin/bash
-# ENV USER=serpentine
-# WORKDIR $HOME
-
-# TODO ...
-# Ensure the git commit hooks are installed in case people do try to update
-# the repo from here !
-
-# RUN mkdir -p /uom_course/Notebooks/external
-# VOLUME /uom_course/Notebooks/external
-# VOLUME /uom_course/Notebooks/Mapping/Resources
-
+USER serpentine
+ENV HOME=/uom_course
+ENV SHELL=/bin/bash
+ENV USER=serpentine
+WORKDIR $HOME
 
 # Launch the notebook server from the Notebook directory
 # The file_to_run option actually does nothing with the no-browser option ...
