@@ -1,3 +1,6 @@
+# NOTE THIS REPO IS SCHEDULED TO BE REMOVED 
+
+
 ## Python for Earth Scientists
 
 Interactive python notebooks for the _'Introduction to Python'_ class at the University of Melbourne School of Earth Sciences.
